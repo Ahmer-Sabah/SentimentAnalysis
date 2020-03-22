@@ -183,7 +183,7 @@ model.add(Dense(num_classes, activation='softmax'))       # FC layer
 
 model.compile(loss=keras.losses.categorical_crossentropy,
               optimizer=keras.optimizers.Adam(),
-              metrics=['accuracy',f1_score, metric_precision, metric_recall]) # adam optimizer
+              metrics=['accuracy',f1_score,metric_precision, metric_recall]) # adam optimizer
 #model.compile(loss=keras.losses.categorical_crossentropy,
 #              optimizer=keras.optimizers.SGD(lr=0.02),
 #              metrics=['accuracy',f1_score, metric_precision, metric_recall]) #SGD optimizer
@@ -194,16 +194,21 @@ X_test = X_test.reshape(X_test.shape[0], X_test.shape[1], 1)
 
 #Train the model
 model.fit(X_train, Y_train,
-          batch_size=128,
-          epochs=10)
+          batch_size=256,
+          epochs=20)
+#model.fit(X_train, Y_train,
+#          batch_size=256,
+#          epochs=10)
 
 # SAVE AND RELOAD MODEL
 
 from keras.models import load_model
 
-model.save('1094243_1dconv_cla.h5')
+model.save('1094243_1dconv_classifier.h5')
 
-#model = load_model('1094243_1dconv_cla.h5')
+#model = load_model('1094243_1dconv_cla.pt')
+
+model = load_model('/content/1094243_1dconv_classifier.h5', custom_objects={'f1_score':f1_score,'metric_precision':metric_precision,'metric_recall':metric_recall})
 
 # This method fetches all the evaluation metrics and calculates them for testing set and displays the results
 def get_metrics (accuracy,f1_score,precision,recall):
